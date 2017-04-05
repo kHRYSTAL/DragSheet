@@ -8,7 +8,8 @@ import android.view.MotionEvent;
 import android.widget.ScrollView;
 
 /**
- * usage: 最外层ScrollView
+ * usage: 最上层ScrollView
+ *  应包含一个{@link OutsideDownFrameLayout}
  * author: kHRYSTAL
  * create time: 17/4/1
  * update time:
@@ -57,7 +58,7 @@ public class OutSideScrollView extends ScrollView {
         //scroll up
         if (offset > 0)
             return super.onInterceptTouchEvent(ev);
-        if (getScrollY() == 0 && (mBodyLayout.getCurrentState()) == OutsideDownFrameLayout.DRAG_STATE_SHOW
+        if (getScrollY() == 0 && mBodyLayout != null && (mBodyLayout.getCurrentState()) == OutsideDownFrameLayout.DRAG_STATE_SHOW
                 || mBodyLayout.getCurrentState() == OutsideDownFrameLayout.DRAG_STATE_MOVE)
             return false;
         return super.onInterceptTouchEvent(ev);

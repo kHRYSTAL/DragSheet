@@ -27,7 +27,7 @@ public class OutsideDownFrameLayout extends FrameLayout {
 
     private float mLastY;
     private int mMoveY;
-    private static int DRAG_Y_MAX = 120;
+    private static int DRAG_Y_MAX = 220;
 
     public static final int DRAG_STATE_SHOW = 1;
     public static final int DRAG_STATE_HIDE = 2;
@@ -98,13 +98,18 @@ public class OutsideDownFrameLayout extends FrameLayout {
         if (-getScrollY() > DRAG_Y_MAX) {
             // 执行隐藏
             mCurrentState = DRAG_STATE_HIDE;
-            mSpace.setVisibility(INVISIBLE);
+            if (mSpace != null) {
+                mSpace.setVisibility(INVISIBLE);
+            }
             // 获取该容器送手后在屏幕仍然可见的高度
             mMoveY = Math.abs(-getMeasuredHeight() - getScrollY());
             // 向下滑动隐藏可见的高度
             mScroller.startScroll(0, getScrollY(), 0, -mMoveY, 1000);
         } else {
             // 还原位置
+            if (mSpace != null) {
+                mSpace.setVisibility(VISIBLE);
+            }
             mCurrentState = DRAG_STATE_SHOW;
             mScroller.startScroll(0, getScrollY(), 0, -getScrollY(), (int) (Math.abs(getScaleY()) / 2));
         }
@@ -127,6 +132,9 @@ public class OutsideDownFrameLayout extends FrameLayout {
 
     public void setSpace(Space space) {
         mSpace = space;
+        if (mSpace != null) {
+            mSpace.setVisibility(VISIBLE);
+        }
     }
 
     @Override
@@ -137,7 +145,9 @@ public class OutsideDownFrameLayout extends FrameLayout {
         }
 
         if (mScroller.isFinished() && mCurrentState == DRAG_STATE_HIDE) {
-            mInsideLayout.moveToCenter();
+            if (mInsideLayout != null) {
+                mInsideLayout.moveToCenter();
+            }
         }
     }
 }

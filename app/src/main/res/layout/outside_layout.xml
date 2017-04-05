@@ -12,23 +12,39 @@
         <Space
             android:id="@+id/space"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="80dp" />
         <!-- body -->
         <me.khrystal.widget.dragsheet.OutsideDownFrameLayout
             android:id="@+id/downFrameLayout"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="800dp">
-            <TextView
-                android:text="Drag Down"
-                android:textStyle="bold"
-                android:textSize="22sp"
-                android:textColor="@android:color/white"
+            <ImageView
+                android:layout_marginTop="30dp"
+                android:id="@+id/ivTriangel"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#f0f"
-                android:gravity="center_horizontal"
-                />
+                android:layout_height="50dp" />
+            <ImageView
+                android:src="@mipmap/ic_launcher"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:id="@+id/llContainer"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_marginTop="80dp"
+                    android:text="Drag down"
+                    android:gravity="center_horizontal"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
         </me.khrystal.widget.dragsheet.OutsideDownFrameLayout>
     </LinearLayout>
 </me.khrystal.widget.dragsheet.OutSideScrollView>

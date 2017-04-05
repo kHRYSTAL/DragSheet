@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 /**
- * usage:
+ * usage: 内部头部容器
  * author: kHRYSTAL
  * create time: 17/4/3
  * update time:
@@ -91,9 +91,13 @@ public class InsideHeaderLayout extends LinearLayout {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     isInAnim = false;
-                    mScrollView.setVisibility(VISIBLE);
-                    mScrollView.scrollTo(0, 0);
-                    mDownFrameLayout.showWithAnim();
+                    if (mScrollView != null) {
+                        mScrollView.setVisibility(VISIBLE);
+                        mScrollView.scrollTo(0, 0);
+                    }
+                    if (mDownFrameLayout != null) {
+                        mDownFrameLayout.showWithAnim();
+                    }
                 }
             });
             objectAnimator.start();
