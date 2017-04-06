@@ -58,8 +58,8 @@ public class OutSideScrollView extends ScrollView {
         //scroll up
         if (offset > 0)
             return super.onInterceptTouchEvent(ev);
-        if (getScrollY() == 0 && mBodyLayout != null && (mBodyLayout.getCurrentState()) == OutsideDownFrameLayout.DRAG_STATE_SHOW
-                || mBodyLayout.getCurrentState() == OutsideDownFrameLayout.DRAG_STATE_MOVE)
+        if (getScrollY() == 0 && mBodyLayout != null && (mBodyLayout.getCurrentState() == OutsideDownFrameLayout.DRAG_STATE_SHOW
+                || mBodyLayout.getCurrentState() == OutsideDownFrameLayout.DRAG_STATE_MOVE))
             return false;
         return super.onInterceptTouchEvent(ev);
     }
