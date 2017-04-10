@@ -28,6 +28,7 @@ public class OutsideDownFrameLayout extends FrameLayout {
     private float mLastY;
     private int mMoveY;
     private static int DRAG_Y_MAX = 220;
+    private float downY;
 
     public static final int DRAG_STATE_SHOW = 1;
     public static final int DRAG_STATE_HIDE = 2;
@@ -64,6 +65,23 @@ public class OutsideDownFrameLayout extends FrameLayout {
 
     public int getCurrentState() {
         return mCurrentState;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            downY = ev.getY();
+        }
+
+        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+            if (getScrollY() <= 0 && ev.getY() - downY > DisplayUtil.dp2px(getContext(), 15)) {
+                mLastY = ev.getY();
+                return true;
+            }
+        }
+
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override

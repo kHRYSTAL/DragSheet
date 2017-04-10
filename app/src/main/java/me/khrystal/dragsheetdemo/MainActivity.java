@@ -6,17 +6,15 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.Toast;
 
+import me.khrystal.widget.dragsheet.DisplayUtil;
 import me.khrystal.widget.dragsheet.InsideHeaderLayout;
 import me.khrystal.widget.dragsheet.OutSideScrollView;
 import me.khrystal.widget.dragsheet.OutsideDownFrameLayout;
-import me.khrystal.widget.dragsheet.Util;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

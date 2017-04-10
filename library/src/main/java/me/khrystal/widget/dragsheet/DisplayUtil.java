@@ -1,4 +1,4 @@
-package me.khrystal.dragsheetdemo;
+package me.khrystal.widget.dragsheet;
 
 import android.content.Context;
 import android.graphics.Point;
