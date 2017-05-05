@@ -1,16 +1,22 @@
 package me.khrystal.widget.dragsheet;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
-import android.widget.Space;
+
+
+import java.util.ArrayList;
 
 /**
- * usage: 外层ScrollView中的下方布局 用于内容显示
  * author: kHRYSTAL
  * create time: 17/4/1
  * update time:
@@ -23,21 +29,23 @@ public class OutsideDownFrameLayout extends FrameLayout {
 
     private Scroller mScroller;
     private InsideHeaderLayout mInsideLayout;
-    private Space mSpace;
+    private ArrayList<View> animViews = new ArrayList<>();
 
+    private float downY;
     private float mLastY;
     private int mMoveY;
     private static int DRAG_Y_MAX = 220;
-    private float downY;
 
     public static final int DRAG_STATE_SHOW = 1;
     public static final int DRAG_STATE_HIDE = 2;
     public static final int DRAG_STATE_MOVE = 3;
 
     public int mCurrentState = DRAG_STATE_SHOW;
+    // 设置scrollview在顶部时 是否支持下拉
+    private boolean enableDragDown = true;
 
     public OutsideDownFrameLayout(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public OutsideDownFrameLayout(Context context, AttributeSet attrs) {
@@ -86,7 +94,7 @@ public class OutsideDownFrameLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mCurrentState == DRAG_STATE_HIDE)
+        if (mCurrentState == DRAG_STATE_HIDE || !enableDragDown)
             return false;
         float y = event.getY();
         switch (event.getAction()) {
@@ -116,18 +124,30 @@ public class OutsideDownFrameLayout extends FrameLayout {
         if (-getScrollY() > DRAG_Y_MAX) {
             // 执行隐藏
             mCurrentState = DRAG_STATE_HIDE;
-            if (mSpace != null) {
-                mSpace.setVisibility(INVISIBLE);
-            }
             // 获取该容器送手后在屏幕仍然可见的高度
-            mMoveY = Math.abs(-getMeasuredHeight() - getScrollY());
+            Rect rect = new Rect();
+            getGlobalVisibleRect(rect);
+            int visiableHeight = rect.height() == 0 ? DisplayUtil.getHeight(getContext()) : rect.height();
+            mMoveY = Math.abs(-visiableHeight - getScrollY());
+
+            if (mInsideLayout != null) {
+                // header 滑动到中央
+                mInsideLayout.moveToCenter();
+            }
+
+            if (!animViews.isEmpty()) {
+                // 隐藏底部操作栏
+//                bottomLayout.setVisibility(GONE);
+                for (View view : animViews) {
+                    hideAlphaAnim(view);
+                }
+
+
+            }
             // 向下滑动隐藏可见的高度
             mScroller.startScroll(0, getScrollY(), 0, -mMoveY, 1000);
         } else {
             // 还原位置
-            if (mSpace != null) {
-                mSpace.setVisibility(VISIBLE);
-            }
             mCurrentState = DRAG_STATE_SHOW;
             mScroller.startScroll(0, getScrollY(), 0, -getScrollY(), (int) (Math.abs(getScaleY()) / 2));
         }
@@ -139,19 +159,23 @@ public class OutsideDownFrameLayout extends FrameLayout {
      */
     public void showWithAnim() {
         mCurrentState = DRAG_STATE_SHOW;
-        mSpace.setVisibility(VISIBLE);
         mScroller.startScroll(0, -mMoveY, 0, mMoveY, 1000);
         invalidate();
+        if (!animViews.isEmpty()) {
+            for (View view : animViews) {
+                showAlphaAnim(view);
+            }
+        }
     }
 
     public void setInsideLayout(InsideHeaderLayout layout) {
         mInsideLayout = layout;
     }
 
-    public void setSpace(Space space) {
-        mSpace = space;
-        if (mSpace != null) {
-            mSpace.setVisibility(VISIBLE);
+    public void setAnimViews(View... views) {
+        animViews.clear();
+        for (int i = 0; i < views.length; i++) {
+            animViews.add(views[i]);
         }
     }
 
@@ -161,11 +185,44 @@ public class OutsideDownFrameLayout extends FrameLayout {
             scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             postInvalidate();
         }
+    }
 
-        if (mScroller.isFinished() && mCurrentState == DRAG_STATE_HIDE) {
-            if (mInsideLayout != null) {
-                mInsideLayout.moveToCenter();
+    public void setEnableDragDown(boolean enableDragDown) {
+        this.enableDragDown = enableDragDown;
+    }
+
+    private void showAlphaAnim(final View view) {
+
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view, "alpha",
+                0f, 1f);
+        objectAnimator.setDuration(1000);
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                view.setVisibility(VISIBLE);
             }
-        }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+            }
+        });
+        objectAnimator.start();
+    }
+
+    private void hideAlphaAnim(final View view) {
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(view, "alpha",
+                1f, 0f);
+        objectAnimator.setDuration(500);
+        objectAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                view.setVisibility(GONE);
+            }
+        });
+        objectAnimator.start();
     }
 }

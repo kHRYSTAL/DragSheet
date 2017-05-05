@@ -16,7 +16,7 @@
             android:textStyle="bold"
             android:textSize="18sp"
             android:gravity="center_horizontal"
-            android:paddingTop="30dp"
+            android:layout_marginTop="60dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </me.khrystal.widget.dragsheet.InsideHeaderLayout>

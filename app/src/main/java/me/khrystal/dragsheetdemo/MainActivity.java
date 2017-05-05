@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Space;
@@ -18,27 +19,37 @@ import me.khrystal.widget.dragsheet.OutsideDownFrameLayout;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    OutsideDownFrameLayout frameLayout;
+    OutsideDownFrameLayout downFrameLayout;
     OutSideScrollView scrollView;
-    InsideHeaderLayout headerLayout;
-    Space space;
+    InsideHeaderLayout insideLayout;
+    Toolbar toolbar;
     ImageView imageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        frameLayout = (OutsideDownFrameLayout) findViewById(R.id.downFrameLayout);
+        downFrameLayout = (OutsideDownFrameLayout) findViewById(R.id.downFrameLayout);
         scrollView = (OutSideScrollView) findViewById(R.id.scrollView);
-        headerLayout = (InsideHeaderLayout) findViewById(R.id.insideLayout);
-        space = (Space) findViewById(R.id.space);
-        headerLayout.setOutsideLayout(frameLayout);
-        headerLayout.setScrollView(scrollView);
-        frameLayout.setInsideLayout(headerLayout);
-        frameLayout.setSpace(space);
-        scrollView.setOutsideLayout(frameLayout);
-        space.setOnClickListener(this);
-
+        insideLayout = (InsideHeaderLayout) findViewById(R.id.insideLayout);
+        toolbar = (Toolbar) findViewById(R.id.toolBar);
+        configToolbar();
+        configCouplingEffects();
         configImageView();
+    }
+
+    private void configToolbar() {
+        toolbar.setTitle("Title");
+    }
+
+    //设置内外布局联动效果
+    private void configCouplingEffects() {
+        insideLayout.setOutsideLayout(downFrameLayout);
+        insideLayout.setScrollView(scrollView);
+        downFrameLayout.setInsideLayout(insideLayout);
+        downFrameLayout.setAnimViews(toolbar);
+        scrollView.setOutsideLayout(downFrameLayout);
+
     }
 
     private void configImageView() {

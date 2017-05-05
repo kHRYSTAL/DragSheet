@@ -3,9 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
+
     <include layout="@layout/inside_layout"/>
     <include layout="@layout/outside_layout"/>
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolBar"
+        android:background="#0ff"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"/>
 </FrameLayout>

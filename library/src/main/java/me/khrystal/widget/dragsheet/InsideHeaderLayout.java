@@ -10,8 +10,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 
+
 /**
- * usage: 内部头部容器
+ * usage: 用于封面收起时动画
+ * 内部头部容器
  * author: kHRYSTAL
  * create time: 17/4/3
  * update time:
@@ -48,10 +50,10 @@ public class InsideHeaderLayout extends LinearLayout {
     }
 
     private void init() {
-        setOnClickListener(new View.OnClickListener() {
+        // 点击内部布局 执行收起电话
+        setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 点击移动至顶部
                 moveToTop();
             }
         });
@@ -59,14 +61,13 @@ public class InsideHeaderLayout extends LinearLayout {
 
     public void moveToCenter() {
         if (!isInAnim) {
-            ObjectAnimator objectAnimator=ObjectAnimator.ofFloat(InsideHeaderLayout.this, "translationY",
-                    (Util.getScreenHeight(getContext()) - getMeasuredHeight()) / 2);
+            ObjectAnimator objectAnimator= ObjectAnimator.ofFloat(InsideHeaderLayout.this, "translationY",
+                    (DisplayUtil.getHeight(getContext())) / 3);
             objectAnimator.setDuration(1000);
             objectAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationStart(Animator animation) {
                     isInAnim = true;
-                    mScrollView.setVisibility(INVISIBLE);
                 }
 
                 @Override
@@ -80,8 +81,8 @@ public class InsideHeaderLayout extends LinearLayout {
 
     public void moveToTop() {
         if (!isInAnim) {
-            ObjectAnimator objectAnimator=ObjectAnimator.ofFloat(InsideHeaderLayout.this, "translationY", 0);
-            objectAnimator.setDuration(1000);
+            ObjectAnimator objectAnimator= ObjectAnimator.ofFloat(InsideHeaderLayout.this, "translationY", 0);
+            objectAnimator.setDuration(500);
             objectAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -92,7 +93,6 @@ public class InsideHeaderLayout extends LinearLayout {
                 public void onAnimationEnd(Animator animation) {
                     isInAnim = false;
                     if (mScrollView != null) {
-                        mScrollView.setVisibility(VISIBLE);
                         mScrollView.scrollTo(0, 0);
                     }
                     if (mDownFrameLayout != null) {
